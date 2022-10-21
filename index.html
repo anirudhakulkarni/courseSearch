@@ -1,0 +1,38 @@
+<!-- Simple app to search in json file
+    file="students.json"
+-->
+<html>
+<head>
+    <title>Search Students</title>
+</head>
+<body>
+    <input type="text" id="search" placeholder="Search">
+    <div id="result"></div>
+    <script>
+        // read file 
+        var students = new XMLHttpRequest();
+        students.open("GET", "students.json", false);
+        students.send(null);
+        var students = JSON.parse(students.responseText);
+        console.log(students);
+        // search function
+        function searchStudents(){
+            var search = document.getElementById("search").value;
+            var result = document.getElementById("result");
+            var html = "";
+            console.log(students);
+            for(var i=0; i<students.length; i++){
+                if(students[i].name.indexOf(search) != -1){
+                    // show name, entry_num, courses registered
+                    html += "<div>" + students[i].name + " " + students[i].entry_num + " " + students[i].courses + "</div>";
+                    // html += "<p>" + students[i].name + "</p>";
+                }
+            }
+            result.innerHTML = html;
+        }
+        // show result when typing
+        document.getElementById("search").addEventListener("keyup", searchStudents);
+    </script>
+</body>
+
+</html>
