@@ -6,7 +6,7 @@
 		<title>Search Students</title>
 	</head>
 	<body>
-		<input type="text" id="search" placeholder="Search" />
+		<input type="text" id="search" placeholder="Search with Name/Entry Number/Kerberos/Course" />
 		<div id="result"></div>
 		<script>
 			// read file
@@ -118,67 +118,68 @@
 				html += '</div>';
 				return html;
 			}
-            function kerberosToEntry(kerberos) {
-                var entry = '';
-                // kerberos = cs5190421 to entry = 2019CS50421
-                // year = 19
-                // dept = CS5
-                // roll = 0421
-                var year = kerberos.substring(3, 5);
-                var dept = kerberos.substring(0, 3);
-                var roll = kerberos.substring(5);
-                entry = '20' + year + dept + roll;
-                // entry = '20' + year + dept + roll;
-                return entry;
-            }
-            // ismatch
-            function ismatch(st,search) {
-                if(st.name.toLowerCase().indexOf(search) != -1) {
-                    return true;
-                }
-                if(st.kerberos.toLowerCase().indexOf(search) != -1) {
-                    return true;
-                }
-                for(var i=0;i<st.courses.length;i++) {
-                    if(st.courses[i].toLowerCase().indexOf(search) != -1) {
-                        return true;
-                    }
-                }
-                if(kerberosToEntry(st.kerberos.toLowerCase()).indexOf(search) != -1) {
-                    return true;
-                }
-                return false;
-            }
+			function kerberosToEntry(kerberos) {
+				var entry = '';
+				// kerberos = cs5190421 to entry = 2019CS50421
+				// year = 19
+				// dept = CS5
+				// roll = 0421
+				var year = kerberos.substring(3, 5);
+				var dept = kerberos.substring(0, 3);
+				var roll = kerberos.substring(5);
+				entry = '20' + year + dept + roll;
+				// entry = '20' + year + dept + roll;
+				return entry;
+			}
+			// ismatch
+			function ismatch(st, search) {
+				if (st.name.toLowerCase().indexOf(search) != -1) {
+					return true;
+				}
+				if (st.kerberos.toLowerCase().indexOf(search) != -1) {
+					return true;
+				}
+				for (var i = 0; i < st.courses.length; i++) {
+					if (st.courses[i].toLowerCase().indexOf(search) != -1) {
+						return true;
+					}
+				}
+				if (kerberosToEntry(st.kerberos.toLowerCase()).indexOf(search) != -1) {
+					return true;
+				}
+				if (st.kerberos.toLowerCase().indexOf(search) != -1) {
+					return true;
+				}
+				return false;
+			}
 			// search function
 			function searchStudents() {
 				var search = document.getElementById('search').value;
 				var result = document.getElementById('result');
 				var html = '';
-                var res=[];
+				var res = [];
 				for (var i = 0; i < students.length; i++) {
-                    // var result = students[i].name.toLowerCase().indexOf(search.toLowerCase());
-                    // var result = ismatch(students[i],search.toLowerCase());
-                    // console.log(result);
+					// var result = students[i].name.toLowerCase().indexOf(search.toLowerCase());
+					// var result = ismatch(students[i],search.toLowerCase());
+					// console.log(result);
 					// search case insensitive
 					if (
 						// result==true
-                        ismatch(students[i],search.toLowerCase())
+						ismatch(students[i], search.toLowerCase())
 					) {
 						// show name, kerberos, courses registered
-                        // console.log(students[i]);
-                        res.push(students[i]);
+						// console.log(students[i]);
+						res.push(students[i]);
 						// html += getdata(students[i]);
 						// html += "<div>" + students[i].name + " " + students[i].kerberos + " " + students[i].courses + "</div>";
 					}
 				}
-                // console.log(res);
-                // sort by name
-                res.sort(function(a,b) {
-                    return a.name.localeCompare(b.name);
-                });
-                for(var i=0;i<res.length;i++) {
-                    html += getdata(res[i]);
-                }
+				res.sort(function (a, b) {
+					return a.name.localeCompare(b.name);
+				});
+				for (var i = 0; i < res.length; i++) {
+					html += getdata(res[i]);
+				}
 				result.innerHTML = html;
 			}
 			// show result when typing
