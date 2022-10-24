@@ -53,13 +53,37 @@ Page shows following layout:
 			</div>
 			<div class="row">
 				<div class="col-sm-12">
-					<form>
+					<!-- list of steps to follow -->
+					<div class="row">
+						<div class="col-sm-12">
+							<h4>Tips</h4>
+							<ol>
+								<li>You can search through Name, Entry Number, Kerberos, Course code</li>
+								<li>Search is case insensitive</li>
+								<li>Sample queries: 
+									<ul>
+										<li>Search for all students in COL106: <b>COL106</b></li>
+										<li>Search for all students in COL106 from 1st semester of 2022: <b>2201-COL106</b></li>
+										<li>Search for all Btech students from 2020 CS department<b></b>: <b>2020CS</b></li>
+									</ul>
+								</li>
+								<li>The stats such as average courses/max courses will be shown for subset of students matching the pattern</li>
+								<li>Contribute here <a href="https://github.com/anirudhakulkarni/courseSearch">Github</a></li>
+							</ol>
+						</div>
+					</div>
+					<!-- break line -->
+					<div class="row">
+						<div class="col-sm-12">
+							<hr />
+						</div>
+					<form onkeypress="return event.keyCode!=13">
 						<div class="form-group">
 							<label>Search:</label>
 							<input type="text" id="search" placeholder="Search with Name/Entry Number/Kerberos/Course" />
 						</div>
 						<div class="form-group">
-							<label for="sel1">Select Max Results (select one):</label>
+							<label for="sel1">Select Max Results:</label>
 							<select class="form-control" id="maxResults">
 								<option value="5">5</option>
 								<option value="10">10</option>
