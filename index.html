@@ -2,37 +2,99 @@
     file="students.json"
 -->
 <html>
-<head>
-    <title>Search Students</title>
-</head>
-<body>
-    <input type="text" id="search" placeholder="Search">
-    <div id="result"></div>
-    <script>
-        // read file 
-        var students = new XMLHttpRequest();
-        students.open("GET", "students.json", false);
-        students.send(null);
-        var students = JSON.parse(students.responseText);
-        console.log(students);
-        // search function
-        function searchStudents(){
-            var search = document.getElementById("search").value;
-            var result = document.getElementById("result");
-            var html = "";
-            console.log(students);
-            for(var i=0; i<students.length; i++){
-                if(students[i].name.indexOf(search) != -1){
-                    // show name, entry_num, courses registered
-                    html += "<div>" + students[i].name + " " + students[i].entry_num + " " + students[i].courses + "</div>";
-                    // html += "<p>" + students[i].name + "</p>";
-                }
-            }
-            result.innerHTML = html;
-        }
-        // show result when typing
-        document.getElementById("search").addEventListener("keyup", searchStudents);
-    </script>
-</body>
+	<head>
+		<title>Search Students</title>
+	</head>
+	<body>
+		<input type="text" id="search" placeholder="Search" />
+		<div id="result"></div>
+		<script>
+			// read file
+			var students = new XMLHttpRequest();
+			students.open('GET', 'students.json', false);
+			students.send(null);
+			var students = JSON.parse(students.responseText);
+			console.log(students);
+			function showmore(name) {
+				// set the xx div visible
+				var xx = document.getElementById('xx' + name);
+				if (xx.style.display === 'none') {
+					xx.style.display = 'block';
+				} else {
+					xx.style.display = 'none';
+				}
+			}
 
+			function getTable(st) {
+				var html = '';
+				html += '<table>';
+                // columns are semester names {semester1, semester2, ...}
+                // sample course 2102-ASL340. extract semester as 2102
+                var columns = Object.keys(st[0]);
+                // header
+                html += '<tr>';
+                for (var i = 0; i < columns.length; i++) {
+                    html += '<th>' + columns[i] + '</th>';
+                }
+                html += '</tr>';
+                // rows
+                for (var i = 0; i < st.length; i++) {
+                    html += '<tr>';
+                    for (var j = 0; j < columns.length; j++) {
+                        html += '<td>' + st[i][columns[j]] + '</td>';
+                    }
+                    html += '</tr>';
+                }
+
+                html += '</table>';
+				// html += '<tr><th>Sr</th><th>Course</th></tr>';
+				// for (var i = 0; i < st.courses.length; i++) {
+				// 	html +=
+				// 		'<tr><td>' + (i + 1) + '</td><td>' + st.courses[i] + '</td></tr>';
+				// }
+				// html += '</table>';
+				return html;
+			}
+			function getdata(st) {
+				// return html with formatted data of each student
+				var html = '';
+				html += '<div>';
+				html += '<h3>' + st.name + '</h3>';
+				html += '<p>' + st.entry_num + '</p>';
+				// show button to show more info and pass student object
+				html +=
+					'<button onclick=\'showmore("' + st.name + '")\'>Courses</button>';
+				// show more info
+				html += "<div style='display:none' id='xx" + st.name + "'>";
+
+				// display courses in table
+				html += getTable(st);
+				html += '</div>';
+				html += '</div>';
+				return html;
+			}
+
+			// search function
+			function searchStudents() {
+				var search = document.getElementById('search').value;
+				var result = document.getElementById('result');
+				var html = '';
+				for (var i = 0; i < students.length; i++) {
+					// search case insensitive
+					if (
+						students[i].name.toLowerCase().indexOf(search.toLowerCase()) != -1
+					) {
+						// show name, entry_num, courses registered
+						html += getdata(students[i]);
+						// html += "<div>" + students[i].name + " " + students[i].entry_num + " " + students[i].courses + "</div>";
+					}
+				}
+				result.innerHTML = html;
+			}
+			// show result when typing
+			document
+				.getElementById('search')
+				.addEventListener('keyup', searchStudents);
+		</script>
+	</body>
 </html>
