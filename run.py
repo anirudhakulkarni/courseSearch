@@ -45,7 +45,7 @@ def get_students():
             students[student]["courses"].append(course)
     json_object = []
     for student in students:
-        json_object.append({"name": students[student]["name"],"entry_num": student,"courses": students[student]["courses"]})
+        json_object.append({"name": students[student]["name"],"kerberos": student,"courses": students[student]["courses"]})
     # dump the students to a json file
     with open('students.json', 'w') as fp:
         json.dump(json_object, fp)

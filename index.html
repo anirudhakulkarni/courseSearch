@@ -105,7 +105,7 @@
 				var html = '';
 				html += '<div>';
 				html += '<h3>' + st.name + '</h3>';
-				html += '<p>' + st.entry_num + '</p>';
+				html += '<p>' + st.kerberos + '</p>';
 				// show button to show more info and pass student object
 				html +=
 					'<button onclick=\'showmore("' + st.name + '")\'>Courses</button>';
@@ -118,18 +118,34 @@
 				html += '</div>';
 				return html;
 			}
+            function kerberosToEntry(kerberos) {
+                var entry = '';
+                // kerberos = cs5190421 to entry = 2019CS50421
+                // year = 19
+                // dept = CS5
+                // roll = 0421
+                var year = kerberos.substring(3, 5);
+                var dept = kerberos.substring(0, 3);
+                var roll = kerberos.substring(5);
+                entry = '20' + year + dept + roll;
+                // entry = '20' + year + dept + roll;
+                return entry;
+            }
             // ismatch
             function ismatch(st,search) {
                 if(st.name.toLowerCase().indexOf(search) != -1) {
                     return true;
                 }
-                if(st.entry_num.toLowerCase().indexOf(search) != -1) {
+                if(st.kerberos.toLowerCase().indexOf(search) != -1) {
                     return true;
                 }
                 for(var i=0;i<st.courses.length;i++) {
                     if(st.courses[i].toLowerCase().indexOf(search) != -1) {
                         return true;
                     }
+                }
+                if(kerberosToEntry(st.kerberos.toLowerCase()).indexOf(search) != -1) {
+                    return true;
                 }
                 return false;
             }
@@ -138,6 +154,7 @@
 				var search = document.getElementById('search').value;
 				var result = document.getElementById('result');
 				var html = '';
+                var res=[];
 				for (var i = 0; i < students.length; i++) {
                     // var result = students[i].name.toLowerCase().indexOf(search.toLowerCase());
                     // var result = ismatch(students[i],search.toLowerCase());
@@ -147,12 +164,21 @@
 						// result==true
                         ismatch(students[i],search.toLowerCase())
 					) {
-						// show name, entry_num, courses registered
+						// show name, kerberos, courses registered
                         // console.log(students[i]);
-						html += getdata(students[i]);
-						// html += "<div>" + students[i].name + " " + students[i].entry_num + " " + students[i].courses + "</div>";
+                        res.push(students[i]);
+						// html += getdata(students[i]);
+						// html += "<div>" + students[i].name + " " + students[i].kerberos + " " + students[i].courses + "</div>";
 					}
 				}
+                // console.log(res);
+                // sort by name
+                res.sort(function(a,b) {
+                    return a.name.localeCompare(b.name);
+                });
+                for(var i=0;i<res.length;i++) {
+                    html += getdata(res[i]);
+                }
 				result.innerHTML = html;
 			}
 			// show result when typing
