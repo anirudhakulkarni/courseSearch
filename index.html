@@ -56,10 +56,10 @@ Page shows following layout:
 					<form>
 						<div class="form-group">
 							<label>Search:</label>
-							<input type="text" id="search" />
+							<input type="text" id="search" placeholder="Search with Name/Entry Number/Kerberos/Course" />
 						</div>
 						<div class="form-group">
-							<label for="sel1">Select list (select one):</label>
+							<label for="sel1">Select Max Results (select one):</label>
 							<select class="form-control" id="maxResults">
 								<option value="5">5</option>
 								<option value="10">10</option>
@@ -72,6 +72,13 @@ Page shows following layout:
 								<option value="2000">2000</option>
 								<option value="10000">10000</option>
 							</select>
+						</div>
+						<!-- show number of results found -->
+						<div id = "resultsFound">
+							<p>Results Found: 
+								<span id = "resultsFoundNumber"></span>
+							</p>
+								<span id = "resultsStats"></span>
 						</div>
 					</form>
 				</div>

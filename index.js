@@ -177,6 +177,109 @@ function searchStudents() {
 	}
 	html += '</tbody></table>';
 	result.innerHTML = html;
+    document.getElementById('resultsFoundNumber').innerHTML = res.length;
+    statshtml = "";
+    // iterate on each students courses list and add to semester wise stats
+    columns = [];
+    for(var i=0;i<res.length;i++) {
+        var st = res[i];
+        for(var j=0;j<st.courses.length;j++) {
+            var course = st.courses[j];
+            var semester = course.substring(0,4);
+            var course = course.substring(5);
+            if(columns.indexOf(semester) == -1) {
+                columns.push(semester);
+            }
+        }
+    }
+    // sort columns
+    columns.sort();
+    // console.log(columns);
+    // sample stats
+    // list                 sem1    sem2    sem3    sem4
+    // averageCourseCount   3.5     3.5     3.5     3.5
+    // maxCourseCount       4       4       4       4
+    // minCourseCount       3       3       3       3
+
+    // add stats
+    statshtml += '<table class="table table-striped"><thead><tr><th>Stats</th>';
+    for(var i=0;i<columns.length;i++) {
+        statshtml += '<th>' + columns[i] + '</th>';
+    }
+    statshtml += '</tr></thead><tbody>';
+    // averageCourseCount
+    statshtml += '<tr><td>Average Course Count</td>';
+    for(var i=0;i<columns.length;i++) {
+        var sum = 0;
+        var count = 0;
+        for(var j=0;j<res.length;j++) {
+            var st = res[j];
+            for(var k=0;k<st.courses.length;k++) {
+                var course = st.courses[k];
+                var semester = course.substring(0,4);
+                var course = course.substring(5);
+                if(semester == columns[i]) {
+                    sum += 1;
+                }
+            }
+        }
+        if(sum == 0) {
+            statshtml += '<td>0</td>';
+        } else {
+            statshtml += '<td>' + (sum/res.length).toFixed(2) + '</td>';
+        }
+    }
+    statshtml += '</tr>';
+    // maxCourseCount
+    statshtml += '<tr><td>Max Course Count</td>';
+    for(var i=0;i<columns.length;i++) {
+        var max = 0;
+
+        for(var j=0;j<res.length;j++) {
+            var st = res[j];
+            var count = 0;
+            for(var k=0;k<st.courses.length;k++) {
+                var course = st.courses[k];
+                var semester = course.substring(0,4);
+                var course = course.substring(5);
+                if(semester == columns[i]) {
+                    count += 1;
+                }
+            }
+            if(count > max) {
+                max = count;
+            }
+        }
+        statshtml += '<td>' + max + '</td>';
+    }
+    statshtml += '</tr>';
+    // minCourseCount
+    statshtml += '<tr><td>Min Course Count</td>';
+    for(var i=0;i<columns.length;i++) {
+        var min = 0;
+
+        for(var j=0;j<res.length;j++) {
+            var st = res[j];
+            var count = 0;
+            for(var k=0;k<st.courses.length;k++) {
+                var course = st.courses[k];
+                var semester = course.substring(0,4);
+                var course = course.substring(5);
+                if(semester == columns[i]) {
+                    count += 1;
+                }
+            }
+            if(count > min) {
+                min = count;
+            }
+        }
+        statshtml += '<td>' + min + '</td>';
+    }
+    statshtml += '</tr>';
+    statshtml += '</tbody></table>';
+
+    document.getElementById('resultsStats').innerHTML = statshtml;
+    
 }
 // show result when typing
 
