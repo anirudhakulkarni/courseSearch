@@ -28,25 +28,70 @@
 			function getTable(st) {
 				var html = '';
 				html += '<table>';
-                // columns are semester names {semester1, semester2, ...}
-                // sample course 2102-ASL340. extract semester as 2102
-                var columns = Object.keys(st[0]);
-                // header
-                html += '<tr>';
-                for (var i = 0; i < columns.length; i++) {
-                    html += '<th>' + columns[i] + '</th>';
-                }
-                html += '</tr>';
-                // rows
-                for (var i = 0; i < st.length; i++) {
-                    html += '<tr>';
-                    for (var j = 0; j < columns.length; j++) {
-                        html += '<td>' + st[i][columns[j]] + '</td>';
-                    }
-                    html += '</tr>';
-                }
+				// columns are semester names {semester1, semester2, ...}
+				// sample course 2102-ASL340. extract semester as 2102
+				var columns = '';
+				for (var i = 0; i < st.courses.length; i++) {
+					var course = st.courses[i];
+					var semester = course.substring(0, 4);
+					if (columns.indexOf(semester) == -1) {
+						columns += semester + ',';
+					}
+				}
+				columns = columns.split(',');
+				for (var i = 0; i < columns.length; i++) {
+					html += '<th>' + columns[i] + '</th>';
+				}
+				html += '</tr>';
+				// rows are courses
+				var courses = [[]];
+				for (var i = 0; i < st.courses.length; i++) {
+					var course = st.courses[i];
+					var semester = course.substring(0, 4);
+					var course = course.substring(5);
+					var index = columns.indexOf(semester);
+					if (courses[index] == undefined) {
+						courses[index] = [];
+					}
+					courses[index].push(course);
+				}
+				// transpose the courses
+				var max = 0;
+				for (var i = 0; i < courses.length; i++) {
+					if (courses[i].length > max) {
+						max = courses[i].length;
+					}
+				}
+				for (var i = 0; i < max; i++) {
+					html += '<tr>';
+					for (var j = 0; j < courses.length; j++) {
+						if (courses[j][i] == undefined) {
+							html += '<td></td>';
+						} else {
+							html += '<td>' + courses[j][i] + '</td>';
+						}
+					}
+					html += '</tr>';
+				}
 
-                html += '</table>';
+				// add courses to respective columns
+				// semester is a column
+
+				// for(var i=0;i<st.courses.length;i++) {
+				//     var course = st.courses[i];
+				//     var semester = course.substring(0,4);
+				//     var course = course.substring(5);
+				//     html += '<tr>';
+				//     for(var j=0;j<columns.length;j++) {
+				//         if(columns[j] == semester) {
+				//             html += '<td>' + course + '</td>';
+				//         } else {
+				//             html += '<td></td>';
+				//         }
+				//     }
+				//     html += '</tr>';
+				// }
+				html += '</table>';
 				// html += '<tr><th>Sr</th><th>Course</th></tr>';
 				// for (var i = 0; i < st.courses.length; i++) {
 				// 	html +=
@@ -73,18 +118,37 @@
 				html += '</div>';
 				return html;
 			}
-
+            // ismatch
+            function ismatch(st,search) {
+                if(st.name.toLowerCase().indexOf(search) != -1) {
+                    return true;
+                }
+                if(st.entry_num.toLowerCase().indexOf(search) != -1) {
+                    return true;
+                }
+                for(var i=0;i<st.courses.length;i++) {
+                    if(st.courses[i].toLowerCase().indexOf(search) != -1) {
+                        return true;
+                    }
+                }
+                return false;
+            }
 			// search function
 			function searchStudents() {
 				var search = document.getElementById('search').value;
 				var result = document.getElementById('result');
 				var html = '';
 				for (var i = 0; i < students.length; i++) {
+                    // var result = students[i].name.toLowerCase().indexOf(search.toLowerCase());
+                    // var result = ismatch(students[i],search.toLowerCase());
+                    // console.log(result);
 					// search case insensitive
 					if (
-						students[i].name.toLowerCase().indexOf(search.toLowerCase()) != -1
+						// result==true
+                        ismatch(students[i],search.toLowerCase())
 					) {
 						// show name, entry_num, courses registered
+                        // console.log(students[i]);
 						html += getdata(students[i]);
 						// html += "<div>" + students[i].name + " " + students[i].entry_num + " " + students[i].courses + "</div>";
 					}
