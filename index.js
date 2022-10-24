@@ -253,29 +253,29 @@ function searchStudents() {
         statshtml += '<td>' + max + '</td>';
     }
     statshtml += '</tr>';
-    // minCourseCount
-    statshtml += '<tr><td>Min Course Count</td>';
-    for(var i=0;i<columns.length;i++) {
-        var min = 0;
+    // // minCourseCount
+    // statshtml += '<tr><td>Min Course Count</td>';
+    // for(var i=0;i<columns.length;i++) {
+    //     var min = 0;
 
-        for(var j=0;j<res.length;j++) {
-            var st = res[j];
-            var count = 0;
-            for(var k=0;k<st.courses.length;k++) {
-                var course = st.courses[k];
-                var semester = course.substring(0,4);
-                var course = course.substring(5);
-                if(semester == columns[i]) {
-                    count += 1;
-                }
-            }
-            if(count > min) {
-                min = count;
-            }
-        }
-        statshtml += '<td>' + min + '</td>';
-    }
-    statshtml += '</tr>';
+    //     for(var j=0;j<res.length;j++) {
+    //         var st = res[j];
+    //         var count = 0;
+    //         for(var k=0;k<st.courses.length;k++) {
+    //             var course = st.courses[k];
+    //             var semester = course.substring(0,4);
+    //             var course = course.substring(5);
+    //             if(semester == columns[i]) {
+    //                 count += 1;
+    //             }
+    //         }
+    //         if(count < min) {
+    //             min = count;
+    //         }
+    //     }
+    //     statshtml += '<td>' + min + '</td>';
+    // }
+    // statshtml += '</tr>';
     statshtml += '</tbody></table>';
 
     document.getElementById('resultsStats').innerHTML = statshtml;
