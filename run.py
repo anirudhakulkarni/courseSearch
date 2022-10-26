@@ -16,6 +16,7 @@ def get_course_list():
         cols = [ele.text.strip() for ele in cols]
         if len(cols) == 1:
             dict[cols[0]] = baseurl+cols[0]+".shtml"
+
     return dict
 
 
@@ -31,6 +32,8 @@ def get_course_details(course):
         cols = [ele.text.strip() for ele in cols]
         if len(cols) == 2:
             dict[cols[0]] = cols[1]
+    # professor is first in the dict
+    # dict['professor'] = dict.pop(list(dict.keys())[0])
     return dict
 
 

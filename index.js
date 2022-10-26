@@ -57,7 +57,10 @@ function getTable(st) {
 			if (courses[j][i] == undefined) {
 				html += '<td></td>';
 			} else {
-				html += '<td>' + courses[j][i] + '</td>';
+				// course + page link
+				html += '<td><a href="http://ldapweb.iitd.ac.in/LDAP/courses/'+columns[j]+'-' + courses[j][i] + '.shtml">' + courses[j][i] + '</a></td>';
+				// html += '<td>' + courses[j][i]+
+				//  + '</td>';
 			}
 		}
 		html += '</tr>';
