@@ -5,7 +5,7 @@ students.send(null);
 var students = JSON.parse(students.responseText);
 // read csv
 var code_to_coursename = new XMLHttpRequest();
-code_to_coursename.open('GET', 'Courses_offered.csv', false);
+code_to_coursename.open('GET', 'Courses_Offered.csv', false);
 code_to_coursename.send(null);
 var code_to_coursename = code_to_coursename.responseText;
 // parse csv to array of lines
