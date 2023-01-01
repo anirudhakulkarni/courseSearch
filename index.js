@@ -3,6 +3,51 @@ var students = new XMLHttpRequest();
 students.open('GET', 'students.json', false);
 students.send(null);
 var students = JSON.parse(students.responseText);
+// read csv
+var code_to_coursename = new XMLHttpRequest();
+code_to_coursename.open('GET', 'Courses_offered.csv', false);
+code_to_coursename.send(null);
+var code_to_coursename = code_to_coursename.responseText;
+// parse csv to array of lines
+// code_to_coursename = code_to_coursename.split(',');
+var code_to_coursename_f = code_to_coursename.split(',');
+
+var codetocoursemap = new Map();
+// for (var i = 0; i < code_to_coursename_f.length; i++) {
+// 	var line = code_to_coursename_f[i];
+// 	var code = line.substring(0, 9);
+// 	var course = line.substring(10);
+// 	codetocoursemap.set(code, course);
+// }
+function getCourseName(code) {
+	if (codetocoursemap.has(code)) {
+		return codetocoursemap.get(code);
+	} else {
+		var coursename='';
+		for(var k=0;k<code_to_coursename_f.length;k++) {
+			if(code_to_coursename_f[k].indexOf(code) != -1) {
+				coursename = code_to_coursename_f[k];
+				break;
+			}
+		}
+		// drop last 4 characters
+		coursename=coursename.substring(0,coursename.length-7);
+		codetocoursemap.set(code, coursename);
+		return coursename;
+	}
+}
+function getHoverCard(code){
+	// return card with course name, instructor name, slot, credit structure
+	var coursename=getCourseName(code);
+	var card='<div class="card" style="width: 18rem;">';
+	card+='<div class="card-body">';
+	card+='<h5 class="card-title">'+coursename+'</h5>';
+	card+='<h6 class="card-subtitle mb-2 text-muted">'+code+'</h6>';
+	card+='<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card\'s content.</p>';
+	card+='<a href="#" class="card-link">Card link</a>';
+	card+='<a href="#" class="card-link">Another link</a>';
+	card+='</div>';
+}
 function showmore(name) {
 	// set the xx div visible
 	var xx = document.getElementById('xx' + name);
@@ -57,8 +102,16 @@ function getTable(st) {
 			if (courses[j][i] == undefined) {
 				html += '<td></td>';
 			} else {
-				// course + page link
-				html += '<td><a href="http://ldapweb.iitd.ac.in/LDAP/courses/'+columns[j]+'-' + courses[j][i] + '.shtml">' + courses[j][i] + '</a></td>';
+				// course + page link + on hover show course name
+				// search in courses_offered.csv to get line with course code and use that line to get course name
+				var coursename=getCourseName(courses[j][i]);
+				// html += '<td><a href="http://ldapweb.iitd.ac.in/LDAP/courses/' + columns[j] + '-' + courses[j][i] + '.shtml" target="blank" title="' + coursename + '">' + courses[j][i] + '</a></td>';
+				// add hover card
+				var hovercard=getHoverCard(courses[j][i]);
+				html += '<td><a href="http://ldapweb.iitd.ac.in/LDAP/courses/' + columns[j] + '-' + courses[j][i] + '.shtml" target="blank" title="' + coursename + '" data-toggle="popover" data-trigger="hover" data-content="'+hovercard+'">' + courses[j][i] +": "+coursename + '</a></td>';
+				// html += '<td><a href="http://ldapweb.iitd.ac.in/LDAP/courses/' + columns[j] + '-' + courses[j][i] + '.shtml" target="blank" title="' + coursename + '">' + courses[j][i]+": "+coursename + '</a></td>';
+				// html += '<td><a href="http://ldapweb.iitd.ac.in/LDAP/courses/' + columns[j] + '-' + courses[j][i] + '.shtml" target="blank" title="' + code_to_coursename_f.
+				// html += '<td><a href="http://ldapweb.iitd.ac.in/LDAP/courses/'+columns[j]+'-' + courses[j][i] + '.shtml" target="blank">' + courses[j][i] + '</a></td>';
 				// html += '<td>' + courses[j][i]+
 				//  + '</td>';
 			}
